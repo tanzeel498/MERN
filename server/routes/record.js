@@ -5,14 +5,17 @@ const db_connect = require("../db/conn");
 
 const recordRoutes = express.Router();
 
-// let db_connect = dbo.getDb();
-db_connect
-  .collection("records")
-  .find({})
-  .toArray((err, result) => {
-    if (err) throw err;
-    res.json(result);
-  });
+recordRoutes.route("/record").get(function (req, res) {
+  db_connect
+    .collection("records")
+    .find({})
+    .toArray()
+    .then((result) => {
+      console.log(result);
+      return res.json(result);
+    })
+    .catch((err) => console.log(err));
+});
 
 recordRoutes.route("/record/:id").get(function (req, res) {
   let myquery = { _id: ObjectId(req.params.id) };
